@@ -1,12 +1,12 @@
 import { createContext } from 'react';
 
 interface IAppContext {
-    dark: boolean;
-    toggleDark?: () => void;
+    isLoading: boolean;
+    toggleLoading?: (toggle: boolean) => void;
   }
 
 export const defaultState = {
-    dark: false,
+  isLoading: false,
 };
 
 export const AppContext = createContext<IAppContext>(defaultState);

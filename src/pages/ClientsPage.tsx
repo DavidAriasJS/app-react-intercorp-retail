@@ -1,22 +1,25 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
+
+import { addDoc, collection } from "firebase/firestore";
 
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { schema } from '../schemas';
+import { IClient } from '../interfaces';
+import { registerClient } from '../api/client';
+import dbFirestore from '../api/firestore';
+import { AppContext } from '../contexts';
 
-interface IFormInputs {
-    firstName: string;
-    lastName: string;
-    birthday: string;
-};
+import Alert from 'react-bootstrap/Alert';
 
 export const ClientsPage:FC = () => {
+    const [ showModal, setShowModal ] = useState(false);
 
-    const [showModal, setShowModal] = useState(false);
+    const { isLoading, toggleLoading } = useContext(AppContext);
 
     const handleCloseModal = () => setShowModal(false);
     const handleShowModal = () => {
@@ -24,13 +27,16 @@ export const ClientsPage:FC = () => {
         setShowModal(true);
     };
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm<IFormInputs>({
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<IClient>({
         resolver: yupResolver(schema)
     });
 
-    const onSubmit = (data: IFormInputs) => {
+    const onSubmit = async (data: IClient) => {
         console.log(data);
-        
+        toggleLoading && toggleLoading(true);
+        const id = await registerClient(data);
+        handleCloseModal();
+        toggleLoading && toggleLoading(false);
     };
 
     return (
@@ -39,6 +45,9 @@ export const ClientsPage:FC = () => {
             <div className='d-flex'>
                 <h1>Clientes</h1>
             </div>
+            <Alert variant="success">
+                Se guardo correctamente
+            </Alert>
             <div className='d-flex'>
                 <Button variant="primary" onClick={handleShowModal}>Nuevo Cliente</Button>
             </div>
@@ -117,10 +126,10 @@ export const ClientsPage:FC = () => {
                     
                 </Modal.Body>
                 <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseModal}>
+                <Button variant="secondary" disabled={isLoading} onClick={handleCloseModal}>
                     Cerrar
                 </Button>
-                <Button type="submit" variant="primary">Guardar</Button>
+                <Button type="submit" disabled={isLoading} variant="primary">{isLoading ? 'Guardando...' : 'Guardar'}</Button>
                 </Modal.Footer>
             </form>
         </Modal>

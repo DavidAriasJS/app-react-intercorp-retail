@@ -8,17 +8,17 @@ interface IAppProviderProps {
 
 export const AppProvider:FC<IAppProviderProps> = ({ children }) => {
 
-    const [dark, setDark] = useState(defaultState.dark);
+    const [isLoading, setIsLoading] = useState(defaultState.isLoading);
 
-    const toggleDark = () => {
-        setDark(!dark);
+    const toggleLoading = (toggle: boolean) => {
+        setIsLoading(toggle);
     };
 
     return (
         <AppContext.Provider
             value={{
-                dark,
-                toggleDark
+                isLoading,
+                toggleLoading
             }}>
         { children }
         </AppContext.Provider>
