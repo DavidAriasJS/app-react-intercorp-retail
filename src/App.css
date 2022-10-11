@@ -1,0 +1,13 @@
+#root {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  display: block;
+}
+
+body {
+  display: flex !important;
+  justify-content: start !important;
+  align-items: start !important;
+}
