@@ -6,22 +6,23 @@ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import Alert from 'react-bootstrap/Alert';
+
 import { schema } from '../schemas';
-import { IClient } from '../interfaces';
 import { getClients, registerClient } from '../api/client';
-import dbFirestore from '../api/firestore';
 import { AppContext } from '../contexts';
 
-import Alert from 'react-bootstrap/Alert';
-import { IClientResponse } from '../interfaces';
+import convertBirthday from '../utils/convertBirthday';
+import calculateAge from '../utils/calculateAge';
+import { IClient } from '../interfaces';
 
 export const ClientsPage:FC = () => {
     const [ showModal, setShowModal ] = useState(false);
     const [ showAlert, setShowAlert ] = useState(false);
     const [ clientIdRegister, setClientIdRegister ] = useState('');
-    const [ listClients, setListClients ] = useState<IClientResponse[]>([]);
+    //const [ listClients, setListClients ] = useState<IClient[]>([]);
 
-    const { isLoading, toggleLoading } = useContext(AppContext);
+    const { isLoading, toggleLoading, clients, setClients } = useContext(AppContext);
 
     const handleCloseModal = () => setShowModal(false);
     const handleShowModal = () => {
@@ -44,6 +45,9 @@ export const ClientsPage:FC = () => {
 
         respClient?.id && setClientIdRegister(respClient.id);
 
+        //Refrescar listado clientes
+        await getListClients();
+
         //Ocultar Alerta
         setTimeout(() => {
             setShowAlert(false);
@@ -52,9 +56,8 @@ export const ClientsPage:FC = () => {
 
     const getListClients = async () => {
         const list = await getClients();
-        await setListClients(list);
-        console.log('LLEGO AL FRONTNE');
-        console.log(list);
+        //await setListClients(list);
+        setClients && setClients(list);
 
     }
 
@@ -67,7 +70,7 @@ export const ClientsPage:FC = () => {
         <>
             <br/>
             <div className='d-flex'>
-                <h1>Clientes ({listClients.length})</h1>
+                <h1>Clientes ({clients.length})</h1>
             </div>
             {showAlert && <Alert variant="success">
                 Se guardo correctamente el cliente <b>{clientIdRegister}</b>
@@ -76,36 +79,35 @@ export const ClientsPage:FC = () => {
                 <Button variant="primary" onClick={handleShowModal}>Nuevo Cliente</Button>
             </div>
             <hr/>
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
-                        <th>Fecha de nacimiento</th>
-                        <th>Edad</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {listClients.map((item, index) => (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{item.firstName}</td>
-                            <td>{item.lastName}</td>
-                            <td>11/22/11</td>
-                            <td>10</td>
+            {clients?.length > 0 
+                ? <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Fecha de nacimiento</th>
+                            <th>Edad</th>
                         </tr>
-                    ))
-                    }
-                    <tr>
-                    <td>sddsfs</td>
-                    <td>DAv</td>
-                    <td>ARIAS</td>
-                    <td>11/22/11</td>
-                    <td>10</td>
-                    </tr>
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                        { clients.map((client, i) => (
+                            <tr key={ i }>
+                                <td>{ i + 1 }</td>
+                                <td>{ client.firstName }</td>
+                                <td>{ client.lastName }</td>
+                                <td>{ convertBirthday(client?.birthday?.seconds) }</td>
+                                <td>{ calculateAge(client?.birthday?.seconds) }</td>
+                            </tr>
+                        )) }
+                    </tbody>
+                </Table> 
+                : <Alert variant="info">
+                    Sin registro de clientes
+                </Alert>
+        
+            }
+            
 
         <Modal
             show={showModal}

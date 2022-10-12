@@ -1,5 +1,5 @@
 import { addDoc, collection, getDocs } from "firebase/firestore";
-import { IClient, IClientResponse } from "../interfaces";
+import { IClient } from "../interfaces";
 import dbFirestore from "./firestore";
 
 const collectionFirestore = 'clients';
@@ -17,10 +17,10 @@ export const registerClient = async (client: IClient) => {
 export const getClients = async () => {
     const querySnapshot = await getDocs(collection(dbFirestore, collectionFirestore));
     
-    let lists: IClientResponse[] = [];
+    let lists: IClient[] = [];
 
     querySnapshot.forEach((doc) => {
-        const dataDoc = doc.data() as IClientResponse;
+        const dataDoc = doc.data() as IClient;
         lists = [...lists, dataDoc];
     });
 
