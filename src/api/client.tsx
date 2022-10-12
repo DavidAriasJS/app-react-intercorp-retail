@@ -1,19 +1,29 @@
-import { addDoc, collection } from "firebase/firestore";
-import { IClient } from "../interfaces";
+import { addDoc, collection, getDocs } from "firebase/firestore";
+import { IClient, IClientResponse } from "../interfaces";
 import dbFirestore from "./firestore";
 
 const collectionFirestore = 'clients';
 
-export const registerClient = async (clientData : IClient)  => {
+export const registerClient = async (client: IClient) => {
     try {
-        const docRef = await addDoc(collection(dbFirestore, collectionFirestore), clientData);
-        
-        console.log('LLEGO AQUI');
-
-        console.log("Document written with ID: ", docRef.id);
-
+        const docRef = await addDoc(collection(dbFirestore, collectionFirestore), client);
+        const respClient = { ...client, id: docRef.id as string };
+        return respClient;
     } catch (e) {
-        console.error("Error adding document: ", e);
+        console.error("Error: ", e);
     }
-};
+}
+
+export const getClients = async () => {
+    const querySnapshot = await getDocs(collection(dbFirestore, collectionFirestore));
+    
+    let lists: IClientResponse[] = [];
+
+    querySnapshot.forEach((doc) => {
+        const dataDoc = doc.data() as IClientResponse;
+        lists = [...lists, dataDoc];
+    });
+
+    return lists;
+}
 
