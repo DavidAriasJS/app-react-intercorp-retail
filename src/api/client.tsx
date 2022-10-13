@@ -1,6 +1,7 @@
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { IClient } from "../interfaces";
 import dbFirestore from "./firestore";
+import calculateAge from '../utils/calculateAge';
 
 const collectionFirestore = 'clients';
 
@@ -21,7 +22,11 @@ export const getClients = async () => {
 
     querySnapshot.forEach((doc) => {
         const dataDoc = doc.data() as IClient;
-        lists = [...lists, dataDoc];
+        lists = [...lists, {
+                ...dataDoc, 
+                age: calculateAge(dataDoc?.birthday?.seconds),
+                fullName: dataDoc.firstName + ' ' + dataDoc.lastName,
+            }];
     });
 
     return lists;

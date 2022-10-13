@@ -1,14 +1,15 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
+
+import Container from 'react-bootstrap/Container';
+
 import { AppProvider } from './contexts';
+import { HomePage, ClientsPage, AnalysisPage } from './pages';
+import { Header } from './components';
 
 import './App.css';
 
-import { HomePage, ClientsPage } from './pages';
-import { Header } from './components';
-import Container from 'react-bootstrap/Container';
-
 const App = () => {
-
+ 
   return (
     <AppProvider>
       <div className="w-100">
@@ -17,6 +18,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={ <HomePage /> } />
             <Route path="clients" element={ <ClientsPage /> } />
+            <Route path="analysis" element={ <AnalysisPage /> } />
             
             <Route path="/*" element={ <Navigate to="/" /> } />
           </Routes>

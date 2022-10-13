@@ -1,2 +1,3 @@
-export * from './clientFormInterface';
-export * from './clientInterface';
+export * from './clientForm.interface';
+export * from './client.interface';
+export * from './getAnalysis.interface';

@@ -5,7 +5,7 @@ interface IAppContext {
     isLoading: boolean;
     toggleLoading?: (toggle: boolean) => void;
     clients: IClient[];
-    setClients?: React.Dispatch<React.SetStateAction<IClient[]>>;
+    toggleClients?: (clients: IClient[]) => void;
   }
 
 export const defaultState = {

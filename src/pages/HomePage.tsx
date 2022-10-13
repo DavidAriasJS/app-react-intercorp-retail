@@ -1,12 +1,11 @@
-import { FC, useContext, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
-import { AppContext } from "../contexts";
+import { FC } from 'react';
 
-export const HomePage:FC = () => {
-
-    return (
-        <>
-            <h1>HomeApp</h1>
-        </>
-    );
-};
+export const HomePage:FC = () => (
+    <>  
+        <br/>
+        <h1>Reto Intercorp</h1>
+        <div className="text-center p-10">
+            <img src="public/logo.svg" className="img-fluid" alt="Intercorp Retail" />
+        </div>
+    </>
+);

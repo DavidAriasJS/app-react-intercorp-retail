@@ -5,6 +5,6 @@ export const schema = yup.object().shape({
     lastName: yup.string().required('Apellidos es requerido'),
     birthday: yup
         .date()
-        .required('Fecha de nacimiento  es requerido')
+        .required('Fecha de nacimiento es requerido')
         .typeError('Fecha incorrecta')
 });

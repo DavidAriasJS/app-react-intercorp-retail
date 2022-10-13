@@ -1,7 +1,6 @@
-import React, { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { AppContext, defaultState } from './AppContext';
-import { useState } from 'react';
-import { IClient } from '../interfaces/clientInterface';
+import { IClient } from '../interfaces/client.interface';
 
 interface IAppProviderProps {
     children: ReactNode
@@ -9,12 +8,16 @@ interface IAppProviderProps {
 
 export const AppProvider:FC<IAppProviderProps> = ({ children }) => {
 
-    const [isLoading, setIsLoading] = useState(defaultState.isLoading);
+    const [isLoading, setIsLoading] = useState<boolean>(defaultState.isLoading);
     const [clients, setClients] = useState<IClient[]>(defaultState.clients);
 
     const toggleLoading = (toggle: boolean) => {
         setIsLoading(toggle);
     };
+
+    const toggleClients = (clients: IClient[]) => {
+        setClients(clients);
+    }
 
     return (
         <AppContext.Provider
@@ -22,7 +25,7 @@ export const AppProvider:FC<IAppProviderProps> = ({ children }) => {
                 isLoading,
                 toggleLoading,
                 clients,
-                setClients
+                toggleClients
             }}>
         { children }
         </AppContext.Provider>

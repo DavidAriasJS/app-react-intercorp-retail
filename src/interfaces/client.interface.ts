@@ -8,4 +8,6 @@ export interface IClient {
     firstName: string;
     lastName: string;
     birthday: IBirthday;
+    age: number;
+    fullName: string;
 };
