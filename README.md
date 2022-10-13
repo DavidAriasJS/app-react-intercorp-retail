@@ -2,9 +2,11 @@
 
 ## Reto Intercorp Retail
 
-------------
-Levantar servidor de desarrollo
-------------
-´´
-yarn dev
-´´
+Tecnología
+
+- [X] Vite
+- [X] React
+- [X] FireStore
+- [X] Firebase Hosting
+
+
