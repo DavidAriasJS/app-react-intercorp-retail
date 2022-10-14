@@ -1,9 +1,8 @@
 # AppReactIntercorpRetail
 
-## Reto Intercorp Retail
+## Challenge Intercorp Retail
 
-Tecnología
-
+Technologies:
 - [X] Vite
 - [X] React
 - [X] Typescript
@@ -11,3 +10,5 @@ Tecnología
 - [X] Firebase Hosting
 
 
+Publish:
+https://reto-intercorp-875d6.web.app/
